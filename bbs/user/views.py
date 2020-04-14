@@ -1,5 +1,4 @@
-from rest_framework.response import Response
-from rest_framework import status
+from django.http.response import Http404
 from rest_framework import mixins, generics
 from user.models import User
 from user.serializers import UserSerializer
@@ -20,9 +19,27 @@ class UserList(generics.GenericAPIView,
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        # self.create(request, *args, **kwargs)
+        self.create(request, *args, **kwargs)
+
+
+class UserDetail(generics.GenericAPIView,
+                 mixins.RetrieveModelMixin,
+                 mixins.UpdateModelMixin,
+                 mixins.DestroyModelMixin):
+
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        try:
+            return User.objects.get(id=self.kwargs['id'])
+        except:
+            raise Http404
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
