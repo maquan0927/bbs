@@ -30,10 +30,7 @@ class UserDetail(generics.GenericAPIView,
     serializer_class = UserSerializer
 
     def get_object(self):
-        try:
-            return User.objects.get(id=self.kwargs['id'])
-        except:
-            raise Http404
+        return self.request.user
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)

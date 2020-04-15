@@ -22,6 +22,17 @@
           </el-submenu>
         </el-submenu>
         <el-menu-item index="3">消息中心</el-menu-item>
+        <el-submenu index="user_info">
+          <template slot="title">
+            <i class="el-icon-user-solid"></i>
+          </template>
+          <template v-if="$cookie.get('access_token')">
+            <el-menu-item index="logout">退出登陆</el-menu-item>
+          </template>
+          <template v-else>
+            <el-menu-item index="login">登陆</el-menu-item>
+          </template>
+        </el-submenu>
       </el-menu>
     </el-header>
 
@@ -43,11 +54,22 @@ export default {
       route_maps: {
         "index": "/ui",
         "ui": "/ui",
+        "login": "/ui/login"
       },
     }
   },
+  created(){
+    this.check_login()
+    const $this = this
+    if(this.$cookie.get('access_token')){
+      this.axios.get('/api/user/detail/')
+      .then(res => {
+        this.user_info = res.data
+      })
+    }
+  },
   mounted() {
-      // 动态设置背景图的高度为浏览器可视区域高度
+    // 动态设置背景图的高度为浏览器可视区域高度
     // 首先在Virtual DOM渲染数据时，设置下背景图的高度．
     // 测试发现需延时50ms才能设置生效
     setTimeout(_=>{
@@ -67,6 +89,12 @@ export default {
         this.$router.push(this.route_maps[key])
       }
     },
+    logout() {
+      this.$cookie.delete('access_token');
+      this.$cookie.delete('refresh_token');
+      this.$cookie.delete('username')
+      this.$router.push('/ui/login')
+    }
   },
   computed: {
     clientHeight: {
@@ -77,6 +105,14 @@ export default {
         this.$store.commit('set_client_height', value)
       }
     },
+    user_info: {
+      get(){
+        return this.$store.state.user_info
+      },
+      set(value){
+        this.$store.commit('set_user_info', value)
+      }
+    }
   }
 }
 </script>

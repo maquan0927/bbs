@@ -6,6 +6,7 @@ import './common/axios'
 import 'element-ui/lib/theme-chalk/index.css'
 import ElementUI from 'element-ui'
 import "@/assets/iconfont/iconfont.css"; 
+import './common/check_login'
 
 Vue.use(ElementUI)
 

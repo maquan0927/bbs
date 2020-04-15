@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^oauth/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
-    url('^user/$', user_views.UserList.as_view())
+    url('^api/user/$', user_views.UserList.as_view()),
+    url('^api/user/detail/$', user_views.UserDetail.as_view())
 ]
