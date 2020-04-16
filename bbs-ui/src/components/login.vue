@@ -56,6 +56,10 @@ export default {
               $this.$cookie.set('access_token', res.data['access_token'], {expires});
               $this.$cookie.set('refresh_token', res.data['refresh_token'], {expires});
               $this.$cookie.set('token_type', res.data['token_type'], {expires});
+              this.axios.get('/api/user/detail/')
+              .then(res => {
+                this.user_info = res.data
+              })
               // 跳转到之前需要进入的页面
               let next = $this.$route.query.next
               if(next){
@@ -77,6 +81,16 @@ export default {
           return false;
         }
       });
+    }
+  },
+  computed: {
+    user_info: {
+      get(){
+        return this.$store.state.user_info
+      },
+      set(value){
+        this.$store.commit('set_user_info', value)
+      }
     }
   }
 }

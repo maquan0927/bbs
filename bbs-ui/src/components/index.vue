@@ -59,14 +59,7 @@ export default {
     }
   },
   created(){
-    this.check_login()
-    const $this = this
-    if(this.$cookie.get('access_token')){
-      this.axios.get('/api/user/detail/')
-      .then(res => {
-        this.user_info = res.data
-      })
-    }
+    console.log(this.user_info)
   },
   mounted() {
     // 动态设置背景图的高度为浏览器可视区域高度
