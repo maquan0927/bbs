@@ -86,27 +86,10 @@ export default {
       this.$cookie.delete('access_token');
       this.$cookie.delete('refresh_token');
       this.$cookie.delete('username')
-      this.$router.push('/ui/login')
+      this.$router.push('/ui')
     }
   },
-  computed: {
-    clientHeight: {
-      get(){
-        return this.$store.state.clientHeight
-      },
-      set(value){
-        this.$store.commit('set_client_height', value)
-      }
-    },
-    user_info: {
-      get(){
-        return this.$store.state.user_info
-      },
-      set(value){
-        this.$store.commit('set_user_info', value)
-      }
-    }
-  }
+  
 }
 </script>
 
