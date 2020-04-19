@@ -59,7 +59,6 @@ export default {
     }
   },
   created(){
-    console.log(this.user_info)
   },
   mounted() {
     // 动态设置背景图的高度为浏览器可视区域高度
@@ -72,6 +71,18 @@ export default {
     window.onresize = function () {
       this.clientHeight = document.documentElement.clientHeight
     }
+  },
+  computed: {
+    clientHeight: {
+      // 计算属性的双向绑定方法，分别定义get和set函数
+      // 方便了vuex数据使用
+      get(){
+        return this.$store.state.clientHeight
+      },
+      set(value){
+        this.$store.commit('set_client_height', value)
+      }
+    },
   },
   methods: {
     handleSelect(key, keyPath) {

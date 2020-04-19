@@ -2,10 +2,10 @@
   <div>
     <el-form :model="login_form" status-icon :rules="rules" ref="login_form" label-width="100px">
       <el-form-item label="用户名" prop="username">
-        <el-input v-model="login_form.username" autocomplete="off"></el-input>
+        <el-input v-model="login_form.username" style="width: 70%;"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="login_form.password" autocomplete="off"></el-input>
+        <el-input type="password" v-model="login_form.password" style="width: 70%;" show-password></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="login">登陆</el-button>

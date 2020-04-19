@@ -168,11 +168,14 @@ STATICFILES_DIRS = (
 # email 邮箱设置
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.126.com'
-EMAIL_HOST_USER = 'maquan0927@126.com'
-EMAIL_HOST_PASSWORD = 'wc980605'
 EMAIL_PORT = 25
+EMAIL_HOST_USER = 'maquan0927@126.com'
+EMAIL_HOST_PASSWORD = 'ONRUWOCRTXGPVUCI'
+EMAIL_HOST_FROM = "maquan0927@126.com"
 
 AUTH_USER_MODEL = 'user.User'
 
 LOGIN_URL = 'rest_framework:login'
 LOGOUT_URL = 'rest_framework:logout'
+
+REDIS_URL = 'redis://39.106.192.69:6379/0'
