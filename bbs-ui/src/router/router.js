@@ -4,11 +4,11 @@ import index from '@/components/index'
 import store from '../common/vuex'
 
 // 注册/登陆/找回密码全局样式
-import login_template from '@/components/login_template'
+import login_template from '@/components/login/login_template'
 // 登陆
-import login from '@/components/login'
+import login from '@/components/login/login'
 // 注册
-import register from '@/components/register'
+import register from '@/components/login/register'
 
 Vue.use(Router)
 

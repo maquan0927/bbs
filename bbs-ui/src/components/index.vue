@@ -5,23 +5,11 @@
     <!-- 顶部导航 -->
     <el-header>
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item>
+        <el-menu-item index="index">
           <i class="iconfont icon-luntanzixun" style="font-size: 30px;"></i>
         </el-menu-item>
         <el-menu-item index="ui">首页</el-menu-item>
-        <el-submenu index="2">
-          <template slot="title">我的工作台</template>
-          <el-menu-item index="2-1">选项1</el-menu-item>
-          <el-menu-item index="2-2">选项2</el-menu-item>
-          <el-menu-item index="2-3">选项3</el-menu-item>
-          <el-submenu index="2-4">
-            <template slot="title">选项4</template>
-            <el-menu-item index="2-4-1">选项1</el-menu-item>
-            <el-menu-item index="2-4-2">选项2</el-menu-item>
-            <el-menu-item index="2-4-3">选项3</el-menu-item>
-          </el-submenu>
-        </el-submenu>
-        <el-menu-item index="3">消息中心</el-menu-item>
+        <el-menu-item v-for="(modu,index) in module" :key="index" :index="modu.name">{{ modu.name }}</el-menu-item>
         <el-submenu index="user_info">
           <template slot="title">
             <i class="el-icon-user-solid"></i>
@@ -31,6 +19,7 @@
           </template>
           <template v-else>
             <el-menu-item index="login">登陆</el-menu-item>
+            <el-menu-item index="register">注册</el-menu-item>
           </template>
         </el-submenu>
       </el-menu>
@@ -54,11 +43,13 @@ export default {
       route_maps: {
         "index": "/ui",
         "ui": "/ui",
-        "login": "/ui/login"
+        "login": "/ui/login",
+        "register": "/ui/register"
       },
     }
   },
   created(){
+    this.load_module()
   },
   mounted() {
     // 动态设置背景图的高度为浏览器可视区域高度
@@ -74,8 +65,6 @@ export default {
   },
   computed: {
     clientHeight: {
-      // 计算属性的双向绑定方法，分别定义get和set函数
-      // 方便了vuex数据使用
       get(){
         return this.$store.state.clientHeight
       },
@@ -83,8 +72,26 @@ export default {
         this.$store.commit('set_client_height', value)
       }
     },
+    module: {
+      get(){
+        return this.$store.state.module
+      },
+      set(value){
+        this.$store.commit('set_module', value)
+      }
+    },
   },
   methods: {
+    load_module(){
+      const $this = this
+      this.axios.get('/api/module/')
+      .then(res => {
+        for(let i of res.data){
+          this.route_maps[i.name] = '/ui/module/' + i.id
+        }
+        this.module = res.data
+      })
+    },
     handleSelect(key, keyPath) {
       if (key === 'logout'){
         this.logout()

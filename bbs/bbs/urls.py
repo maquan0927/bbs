@@ -18,13 +18,19 @@ from django.urls import path, include
 from django.conf.urls import url
 
 from user import views as user_views
+from module import views as module_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^oauth/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
+    # 用户注册登陆
     url('^api/user/$', user_views.UserList.as_view()),
     url('^api/user/detail/$', user_views.UserDetail.as_view()),
-    url('^api/user/email/$', user_views.UserEmail.as_view())
+    url('^api/user/email/$', user_views.UserEmail.as_view()),
+
+    # 模块
+    url('^api/module/$', module_views.ModuleList.as_view()),
+    url('^api/module/(?P<id>\d+)/$', module_views.ModuleDetail.as_view()),
 ]

@@ -17,6 +17,7 @@ export default new Vuex.Store({
       "sex": "",
       "email": ""
     },
+    module: []
   },
   mutations: {
     set_client_height(state, height){
@@ -31,5 +32,8 @@ export default new Vuex.Store({
     set_user_info(state, new_user){
       state.user_info = new_user
     },
+    set_module(state, new_module){
+      state.module = new_module
+    }
   }
 })
