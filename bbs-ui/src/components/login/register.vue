@@ -14,7 +14,7 @@
       </el-form-item>
 
       <el-form-item label="邮箱" prop="email">
-        <el-input v-model="form.email" placeholder="邮箱" style="width: 70%;"></el-input>
+        <el-input v-model="form.email" placeholder="邮箱" style="width: 50%;"></el-input>
         <el-button type="primary" style="width: 20%;" :disabled="is_send_code" @click="send_code">{{ is_send_code ? code_time : '发送验证码' }}</el-button>
       </el-form-item>
 
@@ -34,7 +34,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="create_user">注册用户</el-button>
+        <el-button type="primary" @click="create_user">注册</el-button>
       </el-form-item>
     </el-form>
   </div>

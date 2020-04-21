@@ -9,6 +9,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="login">登陆</el-button>
+        <el-button type="primary" @click="go_to_register">注册</el-button>
       </el-form-item>
     </el-form>   
   </div>
@@ -81,7 +82,10 @@ export default {
           return false;
         }
       });
-    }
+    },
+    go_to_register() {
+      this.$router.push('/ui/register')
+    },
   },
   computed: {
     user_info: {
