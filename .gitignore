@@ -1,5 +1,4 @@
 .idea
-migrations
 *.pyc
 log
 db.sqlite3
