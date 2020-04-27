@@ -10,6 +10,10 @@ import login from '@/components/login/login'
 // 注册
 import register from '@/components/login/register'
 
+// 首页或其他类型帖子
+import module_index from '@/components/dashboard/index'
+import module from '@/components/dashboard/module'
+
 Vue.use(Router)
 
 const router =  new Router({
@@ -17,6 +21,8 @@ const router =  new Router({
   routes: [
     { path: '/ui', name: 'ui', component: index,
       children: [
+        { path: '/ui', name: "inidex", component: module_index},
+        { path: '/ui/module/:id', name: "module", component: module}
       ]
     },
     { path: '/ui/login', name: 'login_template', component: login_template,

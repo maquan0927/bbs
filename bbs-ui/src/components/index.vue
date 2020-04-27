@@ -82,6 +82,15 @@ export default {
     },
   },
   methods: {
+    load_user() {
+      if(!this.cookie.get('access_token')){
+        return
+      }
+      this.axios.get('/api/user/detail/')
+      .then(res => {
+        this.user_info = res.data
+      })
+    },
     load_module(){
       const $this = this
       this.axios.get('/api/module/')
@@ -104,7 +113,7 @@ export default {
       this.$cookie.delete('access_token');
       this.$cookie.delete('refresh_token');
       this.$cookie.delete('username')
-      this.$router.push('/ui')
+      this.$router.go(0)
     }
   },
   

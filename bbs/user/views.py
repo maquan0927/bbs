@@ -57,3 +57,6 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         return self.request.user
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args,**kwargs)

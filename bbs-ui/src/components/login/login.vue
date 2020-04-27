@@ -46,7 +46,6 @@ export default {
           params.append('client_id', '556H3wPz6VjDNuHPapCBVc3CsR3cfvhLgcElb88M');
           params.append('client_secret', '0LkwAp1U84IB3fkY6finw4EfyFdTu311ALdfZHploSEnKprUlG8uxWOKhv0xhEEmDXCOa4vljUI1syLT3qGoIfwws0lkt26QltsBGumjc5Fl1inWQGpg72AavQ7mExaj');
           this.loading = true
-          console.log(params)
           this.axios.post('/oauth/token/', params, {
             headers: {"Content-Type": "application/x-www-form-urlencoded"},
             timeout: 10000

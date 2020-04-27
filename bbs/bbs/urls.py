@@ -19,6 +19,7 @@ from django.conf.urls import url
 
 from user import views as user_views
 from module import views as module_views
+from post import views as post_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,4 +34,7 @@ urlpatterns = [
     # 模块
     url('^api/module/$', module_views.ModuleList.as_view()),
     url('^api/module/(?P<id>\d+)/$', module_views.ModuleDetail.as_view()),
+
+    # 帖子
+    url('^api/post/$', post_views.PostList.as_view())
 ]

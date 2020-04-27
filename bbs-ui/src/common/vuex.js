@@ -15,7 +15,8 @@ export default new Vuex.Store({
       "username":"",
       "birthday": "",
       "sex": "",
-      "email": ""
+      "email": "",
+      "is_superuser": false,
     },
     module: []
   },
