@@ -19,7 +19,7 @@
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
               <el-button type="primary" size="small">查看</el-button>
-              <el-button type="danger" size="small" v-if="user_info.is_superuser || scope.row.module.admin.includes(user_info.id)">删除</el-button>
+              <el-button type="danger" size="small" v-if="user_info.is_superuser || scope.row.module.admin.includes(user_info.id) || scope.row.user.id == user_info.id">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
