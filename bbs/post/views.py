@@ -1,9 +1,5 @@
-from rest_framework.response import Response
-from rest_framework import mixins, generics
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from common.decorator import user_passes_test
-from common.permissions import IsAdmin, IsLogin
-from django.utils.decorators import method_decorator
+from common.permissions import IsLogin
 from post.serializers import PostSerializer
 from post.models import Post
 from django.http import Http404
@@ -19,5 +15,16 @@ class PostList(ListCreateAPIView):
             if self.request.query_params.get('module'):
                 queryset = queryset.filter(module_id=self.request.query_params.get('module'))
             return queryset
+        except:
+            raise Http404
+
+class PostDetail(RetrieveUpdateDestroyAPIView):
+
+    serializer_class = PostSerializer
+    permission_classes = (IsLogin, )
+
+    def get_object(self):
+        try:
+            return Post.objects.get(id=self.kwargs['id'])
         except:
             raise Http404

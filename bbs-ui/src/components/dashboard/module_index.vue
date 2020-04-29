@@ -8,7 +8,7 @@
 
     <el-row type="flex" justify="center">
       <el-col :span="22">
-        <el-table :data="data" stripe style="width: 100%" empty-text="暂时无人发帖">
+        <el-table :data="data" stripe style="width: 100%">
           <el-table-column prop="module" label="板块" width="180" align="center">
             <template slot-scope="scope">
               {{ scope.row.module_detail.name }}
@@ -25,7 +25,7 @@
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
               <el-button type="primary" size="small">查看</el-button>
-              <el-button type="danger" size="small" v-if="user_info.is_superuser || scope.row.module_detail.admin.includes(user_info.id) || scope.row.user_detail.id == user_info.id" @click="delete_post(scope.row.id)">删除</el-button>
+              <el-button type="danger" size="small" v-if="user_info.is_superuser || scope.row.module_detail.admin.includes(user_info.id) || scope.row.user_detaii.id == user_info.id">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -91,23 +91,6 @@ export default {
     this.load_module()
   },
   methods: {
-    delete_post(id){
-      this.$confirm('是否确认删除该帖?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.axios.delete('/api/post/' + id + '/')
-        .then(res => {
-          if(res.status == 204){
-            this.$message.success('删除成功');
-            this.load_data()
-          }
-        })
-        
-      }).catch(() => {        
-      });
-    },
     show_create_post_dialog() {
       let is_login = this.check_login()
       if(is_login){
@@ -138,7 +121,7 @@ export default {
     },
     load_data() {
       const $this = this
-      let url = '/api/post/?module=' + this.$route.params.id
+      let url = '/api/post/'
       this.axios.get(url, {params: {page: this.current_page}})
       .then(res => {
         this.data = res.data.results

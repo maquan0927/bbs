@@ -20,7 +20,7 @@ Vue.prototype.check_login = function(url="/ui"){
     }).then(() => {
       router.push("/ui/login?next=" + url)
     }).catch(() => {
-      return
+      return false
     });
   }
 }

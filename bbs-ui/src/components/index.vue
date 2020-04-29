@@ -50,6 +50,7 @@ export default {
   },
   created(){
     this.load_module()
+    this.load_user()
   },
   mounted() {
     // 动态设置背景图的高度为浏览器可视区域高度
@@ -63,27 +64,9 @@ export default {
       this.clientHeight = document.documentElement.clientHeight
     }
   },
-  computed: {
-    clientHeight: {
-      get(){
-        return this.$store.state.clientHeight
-      },
-      set(value){
-        this.$store.commit('set_client_height', value)
-      }
-    },
-    module: {
-      get(){
-        return this.$store.state.module
-      },
-      set(value){
-        this.$store.commit('set_module', value)
-      }
-    },
-  },
   methods: {
     load_user() {
-      if(!this.cookie.get('access_token')){
+      if(!this.$cookie.get('access_token')){
         return
       }
       this.axios.get('/api/user/detail/')
@@ -116,7 +99,32 @@ export default {
       this.$router.go(0)
     }
   },
-  
+  computed: {
+    clientHeight: {
+      get(){
+        return this.$store.state.clientHeight
+      },
+      set(value){
+        this.$store.commit('set_client_height', value)
+      }
+    },
+    module: {
+      get(){
+        return this.$store.state.module
+      },
+      set(value){
+        this.$store.commit('set_module', value)
+      }
+    },
+    user_info: {
+      get(){
+        return this.$store.state.user_info
+      },
+      set(value){
+        this.$store.commit('set_user_info', value)
+      }
+    }
+  },
 }
 </script>
 
