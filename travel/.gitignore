@@ -1,0 +1,15 @@
+.idea
+migrations
+*.pyc
+log
+db.sqlite3
+media
+
+.vscode*
+dump.rdb
+.vagrant
+Vagrantfile
+dockerbak
+no_salt_iplist.txt
+.DS_Store
+node_modules

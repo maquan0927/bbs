@@ -8,6 +8,8 @@ import login_template from '@/components/login/login_template'
 import login from '@/components/login/login'
 // 注册
 import register from '@/components/login/register'
+// 个人信息
+import user from '@/components/login/user'
 
 // 首页或其他类型帖子
 import module_index from '@/components/dashboard/module_index'
@@ -27,7 +29,8 @@ const router =  new Router({
     { path: '/ui/login', name: 'login_template', component: login_template,
       children: [
         { path: '/ui/login', name: "login", component: login },
-        { path: '/ui/register', name: "register", component: register }
+        { path: '/ui/register', name: "register", component: register },
+        { path: '/ui/user', name: "user", component: user },
       ]
     },
   ]

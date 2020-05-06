@@ -1,13 +1,13 @@
 <template>
   <div>
     <el-row type="flex" justify="center">
-      <el-col :span="22">
+      <el-col :span="23">
         <el-button type="primary" size="small" @click="show_create_post_dialog">发帖</el-button>
       </el-col>
     </el-row>
 
     <el-row type="flex" justify="center">
-      <el-col :span="22">
+      <el-col :span="23">
         <el-table :data="data" stripe style="width: 100%">
           <el-table-column prop="module" label="板块" width="180" align="center">
             <template slot-scope="scope">
@@ -25,7 +25,7 @@
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
               <el-button type="primary" size="small">查看</el-button>
-              <el-button type="danger" size="small" v-if="user_info.is_superuser || scope.row.module_detail.admin.includes(user_info.id) || scope.row.user_detaii.id == user_info.id" @click="delete_post(scope.row.id)">删除</el-button>
+              <el-button type="danger" size="small" v-if="user_info.is_superuser || scope.row.module_detail.admin.includes(user_info.id) || scope.row.user_detail.id == user_info.id" @click="delete_post(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>

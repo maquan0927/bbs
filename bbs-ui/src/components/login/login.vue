@@ -68,7 +68,7 @@ export default {
                 $this.$router.push('/ui')
               }
             }else{
-              $this.$message({message: "登录异常！响应码：" + res.status, type: 'info'});
+              $this.$message({message: "登录失败！请检查您的用户名密码", type: 'error'});
             }
           }).catch((error)=>{
             $this.loading = false

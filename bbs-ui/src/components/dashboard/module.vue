@@ -1,13 +1,13 @@
 <template>
   <div>
     <el-row type="flex" justify="center">
-      <el-col :span="22">
+      <el-col :span="23">
         <el-button type="primary" size="small" @click="show_create_post_dialog">发帖</el-button>
       </el-col>
     </el-row>
 
     <el-row type="flex" justify="center">
-      <el-col :span="22">
+      <el-col :span="23">
         <el-table :data="data" stripe style="width: 100%" empty-text="暂时无人发帖">
           <el-table-column prop="module" label="板块" width="180" align="center">
             <template slot-scope="scope">

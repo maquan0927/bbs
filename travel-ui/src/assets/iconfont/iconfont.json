@@ -1,0 +1,16 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "3555646",
+      "name": "论坛资讯",
+      "font_class": "luntanzixun",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    }
+  ]
+}
