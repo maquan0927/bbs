@@ -1,4 +1,4 @@
-"""bbs URL Configuration
+"""travel URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.0/topics/http/urls/
@@ -16,26 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import url
-
-from user import views as user_views
-from module import views as module_views
-from post import views as post_views
+from info import views as info_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^oauth/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
-    # 用户注册登陆
-    url('^api/user/$', user_views.UserList.as_view()),
-    url('^api/user/detail/$', user_views.UserDetail.as_view()),
-    url('^api/user/email/$', user_views.UserEmail.as_view()),
-
-    # 模块
-    url('^api/module/$', module_views.ModuleList.as_view()),
-    url('^api/module/(?P<id>\d+)/$', module_views.ModuleDetail.as_view()),
-
-    # 帖子
-    url('^api/post/$', post_views.PostList.as_view()),
-    url('^api/post/(?P<id>\d+)/$', post_views.PostDetail.as_view())
+    url(r'^api/index/$', info_views.IndexImgList.as_view()),
+    url(r'^api/recomend/$', info_views.RecomendList.as_view()),
+    url(r'^api/tourguide/$', info_views.TourguideList.as_view()),
+    url(r'^api/message/$', info_views.MessageList.as_view()),
 ]
