@@ -1,6 +1,6 @@
 from rest_framework.generics import ListAPIView, CreateAPIView
-from info.serializers import IndexImgSerializer, RecommendSerializer, TourguideSerializer, MessageSerializer
-from info.models import IndexImg, Recommend, Tourguide, Message
+from info.serializers import IndexImgSerializer, RecommendSerializer, TourguideSerializer, MessageSerializer, UserSerializer
+from info.models import IndexImg, Recommend, Tourguide
 from rest_framework.permissions import IsAuthenticated
 
 class IndexImgList(ListAPIView):
@@ -29,3 +29,7 @@ class MessageList(CreateAPIView):
     def post(self, request, *args, **kwargs):
         request.data['user'] = request.user.id
         return self.create(request, *args, **kwargs)
+
+class UserList(CreateAPIView):
+
+    serializer_class = UserSerializer

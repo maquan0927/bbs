@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'^api/recomend/$', info_views.RecomendList.as_view()),
     url(r'^api/tourguide/$', info_views.TourguideList.as_view()),
     url(r'^api/message/$', info_views.MessageList.as_view()),
+    url(r'^api/user/$', info_views.UserList.as_view()),
 ]
