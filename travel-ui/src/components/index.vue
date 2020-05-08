@@ -82,7 +82,7 @@
     <el-dialog
       width="50%"
       title="留言"
-      :visible.sync="register_dialog">
+      :visible.sync="message_dialog">
       <el-form :model="messageform" ref="messageform" :rules="message_rules">
         <el-form-item label="标题" label-width="100px" prop="title">
           <el-input v-model="messageform.title" autocomplete="off" style="width: 70%;"></el-input>
