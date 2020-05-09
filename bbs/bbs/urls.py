@@ -37,5 +37,6 @@ urlpatterns = [
 
     # 帖子
     url('^api/post/$', post_views.PostList.as_view()),
-    url('^api/post/(?P<id>\d+)/$', post_views.PostDetail.as_view())
+    url('^api/post/(?P<id>\d+)/$', post_views.PostDetail.as_view()),
+    url('^api/repost/$', post_views.RepostList.as_view()),
 ]

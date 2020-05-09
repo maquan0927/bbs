@@ -3,10 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="71ab217c-a4a9-49c6-ace2-24aa36c7874b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../travel-ui/config/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../travel-ui/config/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../travel-ui/src/common/axios.js" beforeDir="false" afterPath="$PROJECT_DIR$/../travel-ui/src/common/axios.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../travel-ui/src/common/check_login.js" beforeDir="false" afterPath="$PROJECT_DIR$/../travel-ui/src/common/check_login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../travel-ui/src/components/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../travel-ui/src/components/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bbs/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/bbs/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/post/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/post/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/post/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/post/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,6 +88,7 @@
       <workItem from="1588165862894" duration="3461000" />
       <workItem from="1588254695249" duration="4679000" />
       <workItem from="1588772667463" duration="2185000" />
+      <workItem from="1589033246022" duration="2821000" />
     </task>
     <servers />
   </component>

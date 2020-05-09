@@ -24,7 +24,7 @@
           <el-table-column prop="create_time" label="发帖时间" width="180" align="center"></el-table-column>
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
-              <el-button type="primary" size="small">查看</el-button>
+              <el-button type="primary" size="small" @click="go_to_detail(scope.row.id)">查看</el-button>
               <el-button type="danger" size="small" v-if="user_info.is_superuser || scope.row.module_detail.admin.includes(user_info.id) || scope.row.user_detail.id == user_info.id" @click="delete_post(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
@@ -91,6 +91,9 @@ export default {
     this.load_module()
   },
   methods: {
+    go_to_detail(id){
+      this.$router.push('/ui/post/' + id)
+    },
     delete_post(id){
       this.$confirm('是否确认删除该帖?', '提示', {
         confirmButtonText: '确定',

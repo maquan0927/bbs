@@ -15,6 +15,9 @@ import user from '@/components/login/user'
 import module_index from '@/components/dashboard/module_index'
 import module from '@/components/dashboard/module'
 
+// 帖子详情
+import post from '@/components/post/post'
+
 Vue.use(Router)
 
 const router =  new Router({
@@ -23,7 +26,8 @@ const router =  new Router({
     { path: '/ui', name: 'ui', component: index,
       children: [
         { path: '/ui', name: "index", component: module_index},
-        { path: '/ui/module/:id', name: "module", component: module}
+        { path: '/ui/module/:id', name: "module", component: module},
+        { path: '/ui/post/:id', name: "post", component: post},
       ]
     },
     { path: '/ui/login', name: 'login_template', component: login_template,

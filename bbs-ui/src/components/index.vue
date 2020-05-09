@@ -35,8 +35,8 @@
     </el-header>
 
     <!-- 主要区域 -->
-    <el-main :style="{ height: clientHeight - 60 + 'px'}">
-      <div style="overflow: scroll; background:#fff; padding: 15px 20px;" :style="{ height: clientHeight - 130 + 'px'}">
+    <el-main :style="{ height: (clientHeight - 60) + 'px'}">
+      <div style="overflow: scroll; background:#fff; padding: 15px 20px;" :style="{ height: (clientHeight - 130) + 'px'}">
         <router-view :key="$route.fullPath"></router-view>
       </div>
     </el-main>
@@ -106,15 +106,16 @@ export default {
     this.load_all_user()
   },
   mounted() {
+    const $this = this;
     // 动态设置背景图的高度为浏览器可视区域高度
     // 首先在Virtual DOM渲染数据时，设置下背景图的高度．
     // 测试发现需延时50ms才能设置生效
     setTimeout(_=>{
-      this.clientHeight = document.documentElement.clientHeight
+      $this.clientHeight = document.documentElement.clientHeight
     }, 50)
     // 然后监听window的resize事件．在浏览器窗口变化时再设置下背景图高度．
     window.onresize = function () {
-      this.clientHeight = document.documentElement.clientHeight
+      $this.clientHeight = document.documentElement.clientHeight
     }
   },
   methods: {
