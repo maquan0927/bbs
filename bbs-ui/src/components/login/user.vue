@@ -25,14 +25,19 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="update_user">修改信息</el-button>
+        <el-button type="primary" @click="updateUser">修改信息</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
+// 配置常量
+const password_MIN_LENGTH = 8
+const password_MAX_LENGTH = 16
+
 export default {
+  name: 'User',
   data() {
     return {
       form: {
@@ -48,11 +53,12 @@ export default {
           { required: true, message: '请输入用户名', trigger: 'blur' },
         ],
         password: [
-          { min: 8, max: 16, message: '长度在8到16个字符', trigger: 'blur' }
+          { min: password_MIN_LENGTH, max: password_MAX_LENGTH, message: `长度在${password_MIN_LENGTH}到${password_MAX_LENGTH}个字符`, trigger: 'blur' }
         ],
         check_password: [
-          { validator: (rule, value, callback) => {
-              if(value != this.form.password){
+          {
+            validator: (rule, value, callback) => {
+              if (value !== this.form.password) {
                 callback(new Error('两次密码输入不一致'))
               }
               callback()
@@ -69,35 +75,48 @@ export default {
       }
     }
   },
+  created() {
+    // 检查登录状态
+    if (!this.$cookie.get('access_token')) {
+      this.$router.push('/ui')
+      return
+    }
+    this.loadUserInfo()
+  },
   methods: {
-    update_user() {
-      this.axios.patch('/api/user/detail/', this.form)
-      .then(res => {
-        if(res.status == 200){
-          this.$message.success('信息修改成功');
-          this.$router.push('/ui')
+    /**
+     * 加载用户信息
+     */
+    loadUserInfo() {
+      this.axios.get('/api/user/detail/')
+        .then(res => {
+          this.form = res.data
+        })
+        .catch(err => {
+          this.$message.error('加载用户信息失败')
+          console.error('加载用户信息失败:', err)
+        })
+    },
+
+    /**
+     * 更新用户信息
+     */
+    updateUser() {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          this.axios.patch('/api/user/detail/', this.form)
+            .then(res => {
+              if (res.status === 200) {
+                this.$message.success('信息修改成功')
+                this.$router.push('/ui')
+              }
+            })
+            .catch(err => {
+              this.$message.error('修改失败，请稍后重试')
+              console.error('修改用户信息失败:', err)
+            })
         }
       })
-    }
-  },
-  created() {
-    console.log(this.$cookie.get('access_token'))
-    if(!this.$cookie.get('access_token')){
-      this.$router.push('/ui')
-    }
-    this.axios.get('/api/user/detail/')
-    .then(res => {
-      this.form = res.data
-    })
-  },
-  computed: {
-    user_info: {
-      get(){
-        return this.$store.state.user_info
-      },
-      set(value){
-        this.$store.commit('set_user_info', value)
-      }
     }
   }
 }

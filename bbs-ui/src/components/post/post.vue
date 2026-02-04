@@ -14,7 +14,7 @@
         </div>
 
         <!-- 回帖 -->
-        <div v-for="(repost, index) in data.reposts" :key="index" style="border-bottom:1px dashed #333;min-height: 50px;padding: 10px;overflow:hidden;">
+        <div v-for="repost in data.reposts" :key="repost.id" style="border-bottom:1px dashed #333;min-height: 50px;padding: 10px;overflow:hidden;">
           {{ repost.content }}
           <div style="margin-top: 30px;float: right;font-size: 14px;">
             回帖时间：{{ repost.create_time }}
@@ -30,7 +30,7 @@
             <el-input type="textarea" :autosize="{ minRows: 5, maxRows: 10}" v-model="form.content" placeholder="回帖内容" style="width: 70%;"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" size="small" @click="submit_repost">回复</el-button>
+            <el-button type="primary" size="small" @click="submitRepost">回复</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -40,6 +40,7 @@
 
 <script>
 export default {
+  name: 'Post',
   data() {
     return {
       data: {
@@ -65,28 +66,57 @@ export default {
     }
   },
   created() {
-    this.load_data()
+    this.loadData()
   },
   methods: {
-    submit_repost() {
-      let is_login = this.check_login()
-      if(is_login){
-        this.axios.post('/api/repost/', this.form)
-        .then(res => {
-          this.form = {
-            content: null,
-            post: this.$route.params.id
+    /**
+     * 提交回帖
+     */
+    submitRepost() {
+      const isLogin = this.check_login()
+      if (isLogin) {
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            this.axios.post('/api/repost/', this.form)
+              .then(res => {
+                this.$message.success('回复成功')
+                this.resetForm()
+                this.loadData()
+              })
+              .catch(err => {
+                this.$message.error('回复失败，请稍后重试')
+                console.error('回复失败:', err)
+              })
           }
-          this.load_data()
         })
       }
     },
-    load_data() {
-      const $this = this
+
+    /**
+     * 重置表单
+     */
+    resetForm() {
+      this.form = {
+        content: null,
+        post: this.$route.params.id
+      }
+      if (this.$refs['form']) {
+        this.$refs['form'].resetFields()
+      }
+    },
+
+    /**
+     * 加载帖子数据
+     */
+    loadData() {
       this.axios.get('/api/post/' + this.$route.params.id + '/')
-      .then(res => {
-        this.data = res.data
-      })
+        .then(res => {
+          this.data = res.data
+        })
+        .catch(err => {
+          this.$message.error('加载帖子失败')
+          console.error('加载帖子失败:', err)
+        })
     }
   }
 }
