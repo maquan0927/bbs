@@ -9,7 +9,7 @@
           <i class="iconfont icon-luntanzixun" style="font-size: 30px;"></i>
         </el-menu-item>
         <el-menu-item index="ui">首页</el-menu-item>
-        <el-menu-item v-for="(modu,index) in module" :key="index" :index="modu.name">{{ modu.name }}</el-menu-item>
+        <el-menu-item v-for="modu in module" :key="modu.id" :index="modu.name">{{ modu.name }}</el-menu-item>
         <el-submenu index="module_admin" v-if="user_info.is_superuser">
           <template slot="title">
             板块管理
@@ -35,8 +35,8 @@
     </el-header>
 
     <!-- 主要区域 -->
-    <el-main :style="{ height: (clientHeight - 60) + 'px'}">
-      <div style="overflow: scroll; background:#fff; padding: 15px 20px;" :style="{ height: (clientHeight - 130) + 'px'}">
+    <el-main :style="{ height: (clientHeight - headerHeight) + 'px'}">
+      <div style="overflow: scroll; background:#fff; padding: 15px 20px;" :style="{ height: (clientHeight - contentPadding) + 'px'}">
         <router-view :key="$route.fullPath"></router-view>
       </div>
     </el-main>
@@ -45,7 +45,7 @@
       <el-form :model="module_form" :rules="module_form_rules" ref="module_form" label-width="100px">
         <el-form-item label="管理板块" prop="module" v-if="['module_update', 'module_del'].includes(module_admin_type)">
           <el-select v-model="module_form.module" filterable placeholder="请选择板块模块" style="width: 80%;" @change="module_change">
-            <el-option v-for="(module, index) in module" :key="index" :label="module.name" :value="module.id"></el-option>
+            <el-option v-for="mod in module" :key="mod.id" :label="mod.name" :value="mod.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="板块名称" prop="name" v-if="['module_update', 'module_add'].includes(module_admin_type)">
@@ -53,7 +53,7 @@
         </el-form-item>
         <el-form-item label="板块管理员" prop="admin" v-if="['module_update', 'module_add'].includes(module_admin_type)">
           <el-select v-model="module_form.admin" multiple filterable placeholder="请选择板块管理员" style="width: 80%;">
-            <el-option v-for="(user, index) in all_user_options" :key="index" :label="user.username" :value="user.id"></el-option>
+            <el-option v-for="user in all_user_options" :key="user.id" :label="user.username" :value="user.id"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -67,6 +67,10 @@
 </template>
 
 <script>
+// 布局常量
+const HEADER_HEIGHT = 60
+const CONTENT_PADDING = 130
+
 export default {
   data() {
     return {
@@ -95,27 +99,34 @@ export default {
         ],
         name: [
           { required: true, message: '请输入板块名', trigger: 'blur' },
-
         ],
-      }
+      },
+      // 布局常量
+      headerHeight: HEADER_HEIGHT,
+      contentPadding: CONTENT_PADDING
     }
   },
-  created(){
-    this.load_module()
-    this.load_user()
-    this.load_all_user()
+  created() {
+    this.loadModule()
+    this.loadUser()
+    this.loadAllUser()
   },
   mounted() {
-    const $this = this;
     // 动态设置背景图的高度为浏览器可视区域高度
-    // 首先在Virtual DOM渲染数据时，设置下背景图的高度．
     // 测试发现需延时50ms才能设置生效
-    setTimeout(_=>{
-      $this.clientHeight = document.documentElement.clientHeight
+    setTimeout(() => {
+      this.clientHeight = document.documentElement.clientHeight
     }, 50)
-    // 然后监听window的resize事件．在浏览器窗口变化时再设置下背景图高度．
-    window.onresize = function () {
-      $this.clientHeight = document.documentElement.clientHeight
+    // 监听window的resize事件，使用箭头函数保持this指向
+    this.handleResize = () => {
+      this.clientHeight = document.documentElement.clientHeight
+    }
+    window.addEventListener('resize', this.handleResize)
+  },
+  beforeDestroy() {
+    // 清理事件监听器，防止内存泄漏
+    if (this.handleResize) {
+      window.removeEventListener('resize', this.handleResize)
     }
   },
   methods: {
@@ -155,44 +166,51 @@ export default {
         }
       });
     },
-    module_change(val){
-      for(let i of this.module){
-        if(i.id == val){
-          this.module_form.name = i.name
-          this.module_form.admin = i.admin
-        }
+    module_change(val) {
+      const selectedModule = this.module.find(i => i.id === val)
+      if (selectedModule) {
+        this.module_form.name = selectedModule.name
+        this.module_form.admin = selectedModule.admin
       }
     },
-    load_all_user() {
-      if(!this.$cookie.get('access_token')){
-        return false
+    loadAllUser() {
+      if (!this.$cookie.get('access_token')) {
+        return
       }
-      if(!this.user_info.is_superuser){
-        return false
+      if (!this.user_info.is_superuser) {
+        return
       }
       this.axios.get('/api/user/')
-      .then(res => {
-        this.all_user_options = res.data
-      })
+        .then(res => {
+          this.all_user_options = res.data
+        })
+        .catch(err => {
+          console.error('加载用户列表失败:', err)
+        })
     },
-    load_user() {
-      if(!this.$cookie.get('access_token')){
+    loadUser() {
+      if (!this.$cookie.get('access_token')) {
         return
       }
       this.axios.get('/api/user/detail/')
-      .then(res => {
-        this.user_info = res.data
-      })
+        .then(res => {
+          this.user_info = res.data
+        })
+        .catch(err => {
+          console.error('加载用户信息失败:', err)
+        })
     },
-    load_module(){
-      const $this = this
+    loadModule() {
       this.axios.get('/api/module/')
-      .then(res => {
-        for(let i of res.data){
-          this.route_maps[i.name] = '/ui/module/' + i.id
-        }
-        this.module = res.data
-      })
+        .then(res => {
+          for (let i of res.data) {
+            this.route_maps[i.name] = '/ui/module/' + i.id
+          }
+          this.module = res.data
+        })
+        .catch(err => {
+          console.error('加载板块列表失败:', err)
+        })
     },
     handleSelect(key, keyPath) {
       if (key === 'logout'){

@@ -15,7 +15,7 @@
 
       <el-form-item label="邮箱" prop="email">
         <el-input v-model="form.email" placeholder="邮箱" style="width: 50%;"></el-input>
-        <el-button type="primary" style="width: 20%;" :disabled="is_send_code" @click="send_code">{{ is_send_code ? code_time : '发送验证码' }}</el-button>
+        <el-button type="primary" style="width: 20%;" :disabled="isSendCode" @click="sendCode">{{ isSendCode ? codeTime : '发送验证码' }}</el-button>
       </el-form-item>
 
       <el-form-item label="验证码" prop="code">
@@ -34,14 +34,20 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="create_user">注册</el-button>
+        <el-button type="primary" @click="createUser">注册</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
+// 配置常量
+const CODE_COUNTDOWN = 300 // 验证码倒计时秒数
+const password_MIN_LENGTH = 8
+const password_MAX_LENGTH = 16
+
 export default {
+  name: 'Register',
   data() {
     return {
       form: {
@@ -52,20 +58,22 @@ export default {
         birthday: null,
         sex: 1,
       },
-      is_send_code: false,
-      code_time: 300,
+      isSendCode: false,
+      codeTime: CODE_COUNTDOWN,
+      sendCodeTimer: null,
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 8, max: 16, message: '长度在8到16个字符', trigger: 'blur' }
+          { min: password_MIN_LENGTH, max: password_MAX_LENGTH, message: `长度在${password_MIN_LENGTH}到${password_MAX_LENGTH}个字符`, trigger: 'blur' }
         ],
         check_password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { validator: (rule, value, callback) => {
-              if(value != this.form.password){
+          {
+            validator: (rule, value, callback) => {
+              if (value !== this.form.password) {
                 callback(new Error('两次密码输入不一致'))
               }
               callback()
@@ -85,57 +93,88 @@ export default {
       }
     }
   },
+  beforeDestroy() {
+    // 清理定时器，防止内存泄漏
+    this.clearCodeTimer()
+  },
   methods: {
-    send_code() {
-      if(!this.form.email){
+    /**
+     * 清理验证码倒计时定时器
+     */
+    clearCodeTimer() {
+      if (this.sendCodeTimer) {
+        clearInterval(this.sendCodeTimer)
+        this.sendCodeTimer = null
+      }
+    },
+
+    /**
+     * 发送验证码
+     */
+    sendCode() {
+      if (!this.form.email) {
         this.$alert('请输入邮箱', '邮箱', {
           confirmButtonText: '确定',
           showClose: false,
-          callback: action => {
-          }
-        });
-      }else{
-        this.axios.post('/api/user/email/', {email: this.form.email})
+        })
+        return
+      }
+
+      this.axios.post('/api/user/email/', { email: this.form.email })
         .then(res => {
           this.$message({
             type: 'success',
             message: '验证码发送成功, 三分钟内有效'
-          });
-          this.is_send_code = true
-          this.code_time = 300
-          this.send_code_timer = setInterval(_ => {
-            if(this.code_time == 0){
-              this.is_send_code = false
-              clearInterval(this.send_code_timer)
+          })
+          this.isSendCode = true
+          this.codeTime = CODE_COUNTDOWN
+
+          // 清理旧的定时器
+          this.clearCodeTimer()
+
+          // 启动新的倒计时
+          this.sendCodeTimer = setInterval(() => {
+            if (this.codeTime <= 0) {
+              this.isSendCode = false
+              this.clearCodeTimer()
+              return
             }
-            this.code_time -= 1
+            this.codeTime -= 1
           }, 1000)
         })
-      }
+        .catch(err => {
+          this.$message.error('发送验证码失败，请稍后重试')
+          console.error('发送验证码失败:', err)
+        })
     },
-    create_user() {
+
+    /**
+     * 创建用户
+     */
+    createUser() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.axios.post('/api/user/', this.form)
-          .then(res => {
-            if(res.status == 201){
-              this.$alert('请登陆或者继续浏览', '注册成功', {
-                confirmButtonText: '确定',
-                callback: action => {
-                  this.$router.push('/ui')
-                }
-              })
-            }else if(res.status == 302){
-              this.$message.error('验证码错误，请重新输入或者重新发送验证码');
-            }else{
-              this.$message.error('用户名或邮箱已存在，请重新输入');
-            }
-          })
-        } else {
-          console.log('error submit!!');
-          return false;
+            .then(res => {
+              if (res.status === 201) {
+                this.$alert('请登陆或者继续浏览', '注册成功', {
+                  confirmButtonText: '确定',
+                  callback: () => {
+                    this.$router.push('/ui')
+                  }
+                })
+              } else if (res.status === 302) {
+                this.$message.error('验证码错误，请重新输入或者重新发送验证码')
+              } else {
+                this.$message.error('用户名或邮箱已存在，请重新输入')
+              }
+            })
+            .catch(err => {
+              this.$message.error('注册失败，请稍后重试')
+              console.error('注册失败:', err)
+            })
         }
-      });
+      })
     }
   },
 }

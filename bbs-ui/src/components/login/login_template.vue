@@ -22,6 +22,7 @@
 
 <script>
 export default {
+  name: 'LoginTemplate',
   data() {
     return {
       clientHeight: null,
@@ -29,15 +30,22 @@ export default {
   },
   mounted() {
     // 动态设置背景图的高度为浏览器可视区域高度
-    // 首先在Virtual DOM渲染数据时，设置下背景图的高度．
     // 测试发现需延时50ms才能设置生效
-    setTimeout(_=>{
+    setTimeout(() => {
       this.clientHeight = document.documentElement.clientHeight
     }, 50)
-    // 然后监听window的resize事件．在浏览器窗口变化时再设置下背景图高度．
-    window.onresize = function () {
+
+    // 监听window的resize事件，使用箭头函数保持this指向
+    this.handleResize = () => {
       this.clientHeight = document.documentElement.clientHeight
     }
+    window.addEventListener('resize', this.handleResize)
   },
+  beforeDestroy() {
+    // 清理事件监听器，防止内存泄漏
+    if (this.handleResize) {
+      window.removeEventListener('resize', this.handleResize)
+    }
+  }
 }
 </script>
